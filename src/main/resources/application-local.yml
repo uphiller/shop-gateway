@@ -1,0 +1,25 @@
+
+server:
+  port: 8081
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/shop
+          jwk-set-uri: http://localhost:8080/realms/shop/protocol/openid-connect/certs
+  cloud:
+    gateway:
+      routes:
+        - id: product
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - CustomAuthFilter
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
