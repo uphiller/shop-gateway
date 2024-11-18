@@ -29,8 +29,7 @@ public class CustomAuthFilter extends AbstractGatewayFilterFactory<CustomAuthFil
                         Jwt jwt = (Jwt) auth.getCredentials();
                         String id = jwt.getClaim("preferred_username");
                         if (id != null) {
-                            System.out.println(id);
-                            kafkaProducerService.sendMessage("id", id);
+                            kafkaProducerService.sendMessage("callApi", id, exchange.getRequest().getURI().toString());
                             return chain.filter(exchange);
                         } else {
                             exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
