@@ -29,8 +29,15 @@ jobs:
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_PASSWORD }}
 
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDDTHHmm
+          utcOffset: "+09:00"
+
       - name: Build, tag, and push image to Docker Hub
         id: build-image
         run: |
-          docker build -t ${{ secrets.HUB_URI }}:$GITHUB_RUN_NUMBER .
-          docker push ${{ secrets.HUB_URI }}:$GITHUB_RUN_NUMBER
+          docker build -t ${{ secrets.HUB_URI }}:${{steps.current-time.outputs.formattedTime}} .
+          docker push ${{ secrets.HUB_URI }}:${{steps.current-time.outputs.formattedTime}}
